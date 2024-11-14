@@ -1,0 +1,63 @@
+{
+  "cookies": {
+    "version": "tough-cookie@5.0.0",
+    "storeType": "MemoryCookieStore",
+    "rejectPublicSuffixes": true,
+    "enableLooseMode": false,
+    "allowSpecialUseDomain": true,
+    "prefixSecurity": "silent",
+    "cookies": [
+      {
+        "key": "__Secure-access-token",
+        "value": "6.0.7L1zv-_gRf2UL8rQkWxFvg.29.AbJjQ9z8Z6AFjxJ_obAJIZEftbWHcQgIE_YkN9sekiQnZ9u_kWYP2MVkdXkKnpeNWA..20241112230710.nCksM6SDvBxEymVY3iyvKrDbAcUkXy2D4276Hp1EJ_c.15ded92c460b2d171",
+        "expires": "2025-11-12T21:07:10.000Z",
+        "domain": "ozon.ru",
+        "path": "/",
+        "secure": true,
+        "httpOnly": true,
+        "hostOnly": false,
+        "creation": "2024-11-12T21:07:11.096Z",
+        "lastAccessed": "2024-11-12T21:07:11.101Z",
+        "sameSite": "lax"
+      },
+      {
+        "key": "__Secure-refresh-token",
+        "value": "6.0.7L1zv-_gRf2UL8rQkWxFvg.29.AbJjQ9z8Z6AFjxJ_obAJIZEftbWHcQgIE_YkN9sekiQnZ9u_kWYP2MVkdXkKnpeNWA..20241112230710.SPenmW7KvTAN3rRkO7e1jDUwQHiAwcU7lPDjKT3XXb4.1de8a9ddbfcaf514c",
+        "expires": "2025-11-12T21:07:10.000Z",
+        "domain": "ozon.ru",
+        "path": "/",
+        "secure": true,
+        "httpOnly": true,
+        "hostOnly": false,
+        "creation": "2024-11-12T21:07:11.099Z",
+        "lastAccessed": "2024-11-12T21:07:11.101Z",
+        "sameSite": "lax"
+      },
+      {
+        "key": "__Secure-ab-group",
+        "value": "29",
+        "expires": "2025-11-12T21:07:10.000Z",
+        "domain": "ozon.ru",
+        "path": "/",
+        "secure": true,
+        "hostOnly": false,
+        "creation": "2024-11-12T21:07:11.100Z",
+        "lastAccessed": "2024-11-12T21:07:11.101Z",
+        "sameSite": "lax"
+      },
+      {
+        "key": "__Secure-user-id",
+        "value": "0",
+        "expires": "2025-11-12T21:07:10.000Z",
+        "domain": "ozon.ru",
+        "path": "/",
+        "secure": true,
+        "httpOnly": true,
+        "hostOnly": false,
+        "creation": "2024-11-12T21:07:11.100Z",
+        "lastAccessed": "2024-11-12T21:07:11.101Z",
+        "sameSite": "lax"
+      }
+    ]
+  }
+}

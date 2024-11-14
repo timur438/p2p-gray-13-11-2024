@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "watch:build": "vite build -w",
+    "watch:start": "nodemon --watch dist/start.js --exec node --env-file=.env --enable-source-maps dist/start.js",
+    "build": "vite build -m production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "commander": "^12.1.0",
+    "kysely": "^0.27.4",
+    "pg": "^8.13.1",
+    "pino": "^9.5.0",
+    "pino-pretty": "^13.0.0",
+    "tough-cookie": "^5.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "~20.14.0",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}
