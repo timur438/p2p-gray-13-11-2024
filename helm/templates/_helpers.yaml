@@ -1,0 +1,9 @@
+{{- define "app.common-labels" -}}
+"app.kubernetes.io/name": {{ $.Chart.Name }}
+"app.kubernetes.io/instance": {{ $.Release.Name }}
+{{- end }}
+
+{{- define "app.labels" -}}
+{{- include "app.common-labels" . }}
+"app.kubernetes.io/version": {{ $.Values.gitRev | quote }}
+{{- end }}

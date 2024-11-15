@@ -1,0 +1,15 @@
+@import "@fontsource-variable/roboto-flex/full.css";
+@import "tailwindcss/base";
+@import "../assets/fonts/icons/icons.css";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+
+@layer base {
+  body,
+  html {
+    background: #ffffff;
+  }
+}

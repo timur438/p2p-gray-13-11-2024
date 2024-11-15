@@ -1,0 +1,42 @@
+{{- if .Values.databaseMigration.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "database-migration"
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "-10"
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: database-migration
+          image: {{ .Values.databaseMigration.image | default .Values.backend.image | required "Database migration image empty" }}
+          imagePullPolicy: {{ .Values.databaseMigration.pullPolicy }}
+          args:
+            {{- range (required "Migration args must be set" .Values.databaseMigration.args) }}
+            - {{ . | quote }}
+            {{- end }}
+          envFrom:
+            - secretRef:
+                name: database-migration-app-env
+          resources: {{ toYaml .Values.databaseMigration.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-migration-app-env
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-11"
+data:
+  {{- range $k, $v := .Values.config.env }}
+  {{ $k }}: {{ $v | b64enc | quote }}
+  {{- end }}
+{{- end }}

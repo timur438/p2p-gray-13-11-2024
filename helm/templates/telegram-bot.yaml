@@ -1,0 +1,45 @@
+{{- if .Values.tgBot.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: telegram-bot
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+    app: telegram-bot
+spec:
+  replicas: 1
+  serviceName: telegram-bot-headless
+  selector:
+    matchLabels:
+      app: telegram-bot
+  template:
+    metadata:
+      labels:
+        app: telegram-bot
+    spec:
+      containers:
+        - name: telegram-bot
+          image: {{ .Values.tgBot.image | default .Values.backend.image | required "main telegram bot image required" }}
+          imagePullPolicy: {{ .Values.tgBot.pullPolicy }}
+          args:
+            - "node"
+            - "--enable-source-maps"
+            - "dist/start.js"
+            - "bot"
+            - "start"
+          envFrom:
+            - secretRef:
+                name: app-env
+          resources: {{ toYaml .Values.tgBot.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: telegram-bot-headless
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  selector:
+    app: telegram-bot
+{{- end }}

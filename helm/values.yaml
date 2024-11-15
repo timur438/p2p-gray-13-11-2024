@@ -1,0 +1,65 @@
+gitRev: 'NONE'
+
+ingress:
+  enabled: true
+  annotations: { }
+  host: ""
+
+backend:
+  enabled: true
+  image: ""
+  pullPolicy: IfNotPresent
+  replica:
+    count: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+
+databaseMigration:
+  enabled: true
+  image: ""
+  pullPolicy: IfNotPresent
+  args:
+    - "node"
+    - "--enable-source-maps"
+    - "dist/start.js"
+    - "db"
+    - "migrate"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 2000m
+      memory: 2G
+
+frontend:
+  enabled: true
+  image: ""
+  pullPolicy: IfNotPresent
+  replica:
+    count: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+redis:
+  enabled: true
+  resources:
+    requests: null
+    limits:
+      cpu: 200m
+      memory: 512Mi
+
+config:
+  env:
+    LOG_FORMAT: "pretty"
+    LOG_LEVEL: "info"

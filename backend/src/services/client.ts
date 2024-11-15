@@ -3,9 +3,13 @@ import axios, {AxiosInstance, AxiosResponse} from 'axios'
 
 const userAgent = 'Mozilla/5.0 (Windows; Windows NT 6.1; x64; en-US) AppleWebKit/603.36 (KHTML, like Gecko) Chrome/49.0.1051.127 Safari/600'
 
-function create(cookies?: SerializedCookieJar | null) {
+function create(cookies?: CookieJar | SerializedCookieJar | null) {
   const jar = cookies
-    ? CookieJar.fromJSON(cookies)
+    ? (
+      (cookies instanceof CookieJar)
+        ? cookies
+        : CookieJar.fromJSON(cookies)
+    )
     : new CookieJar()
 
   const client = axios.create({
