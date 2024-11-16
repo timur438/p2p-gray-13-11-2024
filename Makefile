@@ -57,16 +57,19 @@ secrets-decrypt:
 secrets-clear:
 	rm -f ./helm/values-*.yaml ./helm/kubeconfig-*.yaml
 
+helm-main:
+	helm upgrade --install \
+		--atomic --timeout 10m \
+		p2p-gray -n p2p-gray \
+		./helm -f ./helm/values-main.yaml \
+		--set "gitRev=$(GIT_REV)" \
+		--set "backend.image=$(CONTAINER_BASE)-backend:$(GIT_REV)" \
+		--set "frontend.image=$(CONTAINER_BASE)-frontend:$(GIT_REV)"
+
 deploy-main:
 	$(MAKE) secrets-decrypt
 	$(KUBECTL) get ns warena-main > /dev/null || (echo 'Namespace does not exists' && exit 1)
 	$(MAKE) container-build
 	$(MAKE) container-push
-	helm upgrade --install \
-		--atomic --timeout 10m \
-		warena-main -n warena-main \
-		./helm -f ./helm/values-main.yaml \
-		--set "gitRev=$(GIT_REV)" \
-		--set "backend.image=$(CONTAINER_BASE)-backend:$(GIT_REV)" \
-		--set "frontend.image=$(CONTAINER_BASE)-frontend:$(GIT_REV)"
+	$(MAKE) helm-main
 	$(MAKE) secrets-clear
