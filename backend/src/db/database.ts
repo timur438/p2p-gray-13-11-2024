@@ -14,6 +14,15 @@ export type DbEntity<T extends keyof DB> = Selectable<DB[T]>
 
 export interface DB {
 
+  managers: {
+    id: Generated<string>
+    login: string
+    password: string
+    active: boolean
+    permissions: TJsonValue<Record<string, any>>
+    created_at: TAutoDateField
+  }
+
   apps: {
     id: Generated<string>
     name: string

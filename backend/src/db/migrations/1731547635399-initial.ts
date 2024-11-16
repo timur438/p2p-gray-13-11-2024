@@ -4,6 +4,16 @@ export async function up(db: Kysely<any>) {
   await sql`
       CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+      CREATE TABLE managers
+      (
+          id          BIGSERIAL PRIMARY KEY,
+          login       VARCHAR(255) NOT NULL UNIQUE,
+          password    VARCHAR(255) NOT NULL,
+          active      BOOLEAN      NOT NULL DEFAULT TRUE,
+          permissions JSONB        NOT NULL DEFAULT '[]'::JSONB,
+          created_at  TIMESTAMPTZ           DEFAULT NOW()
+      );
+
       CREATE TABLE apps
       (
           id         BIGSERIAL PRIMARY KEY,
