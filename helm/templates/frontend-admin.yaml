@@ -1,0 +1,72 @@
+{{- if .Values.adminFrontend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-admin
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+    app: frontend-admin
+spec:
+  replicas: {{ .Values.adminFrontend.replica.count }}
+  selector:
+    matchLabels:
+      app: frontend-admin
+  template:
+    metadata:
+      labels:
+        app: frontend-admin
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.adminFrontend.image | required "Frontend image required" }}
+          imagePullPolicy: {{ .Values.adminFrontend.pullPolicy }}
+          resources: {{ toYaml .Values.adminFrontend.resources | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          readinessProbe:
+            initialDelaySeconds: 3
+            httpGet:
+              port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-admin
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: frontend-admin
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+      appProtocol: http
+---
+{{- if .Values.ingressAdmin.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-admin
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  {{- if .Values.ingressAdmin.annotations }}
+  annotations: {{ toYaml .Values.ingressAdmin.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{ required "Ingress host must be set" .Values.ingressAdmin.host | quote }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-admin
+                port:
+                  name: http
+{{- end }}
+{{- end }}

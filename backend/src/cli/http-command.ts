@@ -22,8 +22,6 @@ export default function httpCliCommands(cmd: Command) {
       await redisConnect()
       await databaseConnect()
 
-      http.register(registerUserApiRoutes)
-
       await http.listen({
         host: '0.0.0.0',
         port: 8000,

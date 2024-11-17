@@ -5,15 +5,15 @@ const validator = z.object({
    * Secret key for the app encryption and validation.
    * Should be a 64-character hex value.
    */
-  APP_SECRET: z.string().length(64).nullish(),
+  APP_SECRET: z.string().length(64),
   /**
    * Redis URL.
    */
-  REDIS_URL: z.string().url().nullish(),
+  REDIS_URL: z.string().url(),
   /**
    * Postgres database URL or connection string.
    */
-  DATABASE_URL: z.string().url().nullish(),
+  DATABASE_URL: z.string().url(),
 })
 
 export const parse = validator.safeParse(process.env)

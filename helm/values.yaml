@@ -5,6 +5,11 @@ ingress:
   annotations: { }
   host: ""
 
+ingressAdmin:
+  enabled: true
+  annotations: { }
+  host: ""
+
 backend:
   enabled: true
   image: ""
@@ -38,6 +43,20 @@ databaseMigration:
       memory: 2G
 
 frontend:
+  enabled: true
+  image: ""
+  pullPolicy: IfNotPresent
+  replica:
+    count: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+adminFrontend:
   enabled: true
   image: ""
   pullPolicy: IfNotPresent

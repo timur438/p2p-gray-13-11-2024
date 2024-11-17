@@ -2,6 +2,8 @@ import {fastify} from 'fastify'
 import {serializerCompiler, validatorCompiler, ZodTypeProvider} from 'fastify-type-provider-zod'
 import {logger} from '../logger.ts'
 import {kubeProbes} from '@/http/common/kube-probes.ts'
+import {registerUserApiRoutes} from '@/http/user-api'
+import {registerAdminRoutes} from '@/http/admin'
 
 export const httpLogger = logger.child({name: 'http'})
 
@@ -19,6 +21,9 @@ export function createHttpServer() {
   server.setSerializerCompiler(serializerCompiler)
 
   server.register(kubeProbes)
+
+  server.register(registerUserApiRoutes)
+  server.register(registerAdminRoutes)
 
   server.setErrorHandler((error, request, reply) => {
     const statusCode = error.statusCode ?? 500

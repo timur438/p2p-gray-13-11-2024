@@ -2,7 +2,7 @@ MAKEFLAGS += -j3
 DOCKER=docker
 KUBECTL=kubectl
 GIT_REV=$(shell git rev-parse --short HEAD)
-CONTAINER_BASE=localhost/warena
+CONTAINER_BASE=localhost/p2p-gray
 
 export KUBECONFIG=./helm/kubeconfig-default.yaml
 
@@ -20,12 +20,20 @@ container-build-frontend:
     	-t="$(CONTAINER_BASE)-frontend:$(GIT_REV)" \
     	--progress=plain "."
 
-container-build: container-build-backend container-build-frontend
+container-build-admin-frontend:
+	$(DOCKER) build \
+    	--target=release \
+    	-f="./admin-frontend/Dockerfile" \
+    	-t="$(CONTAINER_BASE)-admin-frontend:$(GIT_REV)" \
+    	--progress=plain "."
+
+container-build: container-build-backend container-build-frontend container-build-admin-frontend
 
 container-push:
 	REMOTE_IMAGES="$$(bash ./kubectl-node_shell "$$($(KUBECTL) get node -o 'jsonpath={.items[0].metadata.name}')" -- ctr image ls)"; \
 	if  echo "$$REMOTE_IMAGES" | grep -q "$(CONTAINER_BASE)-backend:$(GIT_REV)" && \
-		echo "$$REMOTE_IMAGES" | grep -q "$(CONTAINER_BASE)-frontend:$(GIT_REV)"; \
+		echo "$$REMOTE_IMAGES" | grep -q "$(CONTAINER_BASE)-frontend:$(GIT_REV)" && \
+		echo "$$REMOTE_IMAGES" | grep -q "$(CONTAINER_BASE)-admin-frontend:$(GIT_REV)"; \
 	then \
 		echo "Images already exists"; \
 	else \
@@ -64,11 +72,12 @@ helm-main:
 		./helm -f ./helm/values-main.yaml \
 		--set "gitRev=$(GIT_REV)" \
 		--set "backend.image=$(CONTAINER_BASE)-backend:$(GIT_REV)" \
-		--set "frontend.image=$(CONTAINER_BASE)-frontend:$(GIT_REV)"
+		--set "frontend.image=$(CONTAINER_BASE)-frontend:$(GIT_REV)" \
+		--set "adminFrontend.image=$(CONTAINER_BASE)-admin-frontend:$(GIT_REV)"
 
 deploy-main:
 	$(MAKE) secrets-decrypt
-	$(KUBECTL) get ns warena-main > /dev/null || (echo 'Namespace does not exists' && exit 1)
+	$(KUBECTL) get ns p2p-gray > /dev/null || (echo 'Namespace does not exists' && exit 1)
 	$(MAKE) container-build
 	$(MAKE) container-push
 	$(MAKE) helm-main

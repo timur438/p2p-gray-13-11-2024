@@ -1,4 +1,5 @@
 import {ColumnType, Generated, Selectable} from 'kysely'
+import {SerializedCookieJar} from 'tough-cookie'
 
 type TDateField = ColumnType<Date, Date | string, Date | string>
 type TNullableDateField = ColumnType<Date | null, Date | string | null, Date | string | null>
@@ -19,7 +20,7 @@ export interface DB {
     login: string
     password: string
     active: boolean
-    permissions: TJsonValue<Record<string, any>>
+    permissions: TJsonValue<Array<string>>
     created_at: TAutoDateField
   }
 
@@ -33,7 +34,10 @@ export interface DB {
     id: Generated<string>
     type: string
     number: string
-    auth: TJsonValue<Record<string, any>>
+    auth: TJsonValue<{
+      cookies?: SerializedCookieJar
+      proxy?: { ip: string, port: number, login: string, password: string }
+    }>
     created_at: TAutoDateField
   }
 

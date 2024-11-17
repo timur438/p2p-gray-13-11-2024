@@ -3,7 +3,6 @@ FROM docker.io/node:20-slim AS build
 WORKDIR /app/frontend
 
 COPY ./frontend /app/frontend
-COPY ./i18n /app/i18n
 
 RUN --mount=type=cache,target=/root/.local/share/ \
     set -xe; \
