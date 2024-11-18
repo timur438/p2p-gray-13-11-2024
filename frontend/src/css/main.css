@@ -1,14 +1,23 @@
 @import "@fontsource-variable/roboto-flex/full.css";
-@import "tailwindcss/base";
+@import "tailwindcss/base.css";
+@import "tailwindcss/components.css";
+@import "tailwindcss/utilities.css";
 
-@import "tailwindcss/components";
+body {
+  background-color: #000;
+  background-image: url(../assets/img/background.jpeg);
+  background-size: cover;
+  background-position: bottom center;
+  background-attachment: fixed;
+}
 
-@import "tailwindcss/utilities";
+.bg-alert {
+  background-image: url(../assets/img/alert-bg.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
-
-@layer base {
-  body,
-  html {
-    background: #ffffff;
-  }
+a[href]{
+  @apply text-[#ff8f1e] underline underline-offset-2 cursor-pointer;
 }

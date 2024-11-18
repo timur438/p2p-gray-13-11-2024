@@ -42,11 +42,11 @@ export async function up(db: Kysely<any>) {
       (
           id              BIGSERIAL PRIMARY KEY,
           secure_key      VARCHAR(32) NOT NULL DEFAULT ENCODE(gen_random_bytes(16), 'hex'),
-          status          SMALLINT    NOT NULL, -- 0: pending, 1: paid, 2: canceled
+          status          SMALLINT    NOT NULL DEFAULT 0, -- 0: pending, 1: paid, 2: canceled
           app_id          BIGINT      NOT NULL REFERENCES apps (id) ON DELETE RESTRICT,
           amount          INTEGER     NOT NULL CHECK ( amount > 0 ),
-          bank_account_id BIGINT      NOT NULL REFERENCES bank_accounts (id) ON DELETE RESTRICT,
-          expires_at      TIMESTAMPTZ NOT NULL,
+          bank_account_id BIGINT      NULL REFERENCES bank_accounts (id) ON DELETE RESTRICT,
+          expires_at      TIMESTAMPTZ NOT NULL DEFAULT NOW() + INTERVAL '20 minutes',
           created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
 

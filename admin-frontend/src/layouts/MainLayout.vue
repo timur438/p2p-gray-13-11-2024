@@ -22,7 +22,7 @@
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
 
-        <q-item :to="{name: 'home'}" exact>
+        <q-item :to="{name: 'payment'}" exact>
           <q-item-section avatar>
             <q-icon name="dashboard"/>
           </q-item-section>
