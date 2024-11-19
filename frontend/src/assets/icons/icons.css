@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "app-icons";
+  src: url('./app-icons.woff2?t=1732039529653') format('woff2'),
+  url('./app-icons.woff?t=1732039529653') format('woff'),
+  url('./app-icons.ttf?t=1732039529653') format('truetype'),
+  url('./app-icons.svg?t=1732039529653') format('svg');
+}
+
+[class^="i-"], [class*=" i-"] {
+  font-family: 'app-icons' !important;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.i-cards:before { content: "\ea01"; }
+.i-scan-barcode:before { content: "\ea02"; }
+
+

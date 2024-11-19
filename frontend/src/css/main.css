@@ -2,6 +2,7 @@
 @import "tailwindcss/base.css";
 @import "tailwindcss/components.css";
 @import "tailwindcss/utilities.css";
+@import "../assets/icons/icons.css";
 
 body {
   background-color: #000;
@@ -23,9 +24,9 @@ a[href] {
 }
 
 .btn-primary {
-  @apply py-2 px-3 flex-grow rounded-md bg-[#ff8f1e];
+  @apply py-2 px-3 flex-grow rounded-md text-center bg-[#ff8f1e];
 }
 
 .btn-secondary {
-  @apply py-2 px-3 flex-grow rounded-md border border-[rgba(255,255,255,0.08)] bg-[#121212];
+  @apply py-2 px-3 flex-grow rounded-md text-center border border-[rgba(255,255,255,0.08)] bg-[#121212];
 }

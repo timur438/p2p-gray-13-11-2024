@@ -8,7 +8,7 @@ type TAutoBigNumberField = ColumnType<string, string | number | undefined, strin
 type TBigNumberField = ColumnType<string, string | number, string | number>
 type TNullableBigNumberField = ColumnType<string, string | number | undefined, string | number | undefined>
 type TANullableDateField = ColumnType<Date | null, Date | string | null | undefined, Date | string | null | undefined>
-type TNullable<T> = ColumnType<T | null, string | null | undefined, string | null | undefined>
+type TNullable<T> = ColumnType<T | null, T | null | undefined, T | null | undefined>
 type TJsonValue<T> = ColumnType<T, T | string, T | string>
 type TAutoJsonValue<T> = ColumnType<T, T | string | undefined, T | string>
 
@@ -35,6 +35,7 @@ export interface DB {
     id: Generated<string>
     type: string
     number: string
+    card_number: TNullable<string>
     auth: TJsonValue<{
       cookies?: SerializedCookieJar
       proxy?: { ip: string, port: number, login: string, password: string }

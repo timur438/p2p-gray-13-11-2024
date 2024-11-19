@@ -20,7 +20,7 @@ export function invoicesController(http: IHttp) {
 
       const invoice = await db.selectFrom('invoices as i')
         .leftJoin('bank_accounts as ba', 'i.bank_account_id', 'ba.id')
-        .select(['i.id', 'i.amount', 'ba.number', 'i.status', 'ba.type', 'i.expires_at', 'i.user_approved_at'])
+        .select(['i.id', 'i.amount', 'ba.number', 'i.status', 'ba.type', 'i.expires_at', 'i.user_approved_at', 'ba.card_number'])
         .where('i.id', '=', invoiceId)
         .where('i.secure_key', '=', invoiceSecure)
         .executeTakeFirst()

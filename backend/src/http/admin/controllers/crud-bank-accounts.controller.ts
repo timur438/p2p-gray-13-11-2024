@@ -46,6 +46,7 @@ export function registerBankAccountsController(http: IHttp) {
     validator: z.object({
       type: z.string(),
       number: z.string(),
+      card_number: z.string().nullable(),
       proxy: z.object({
         ip: z.string(),
         port: z.number(),
@@ -90,6 +91,7 @@ export function registerBankAccountsController(http: IHttp) {
         )
         .$if(data.type !== undefined, q => q.set('type', data.type!))
         .$if(data.number !== undefined, q => q.set('number', data.number!))
+        .$if(data.card_number !== undefined, q => q.set('card_number', data.card_number))
         .returningAll()
         .executeTakeFirst()
       if (!updated) {
@@ -106,6 +108,7 @@ export function registerBankAccountsController(http: IHttp) {
     validator: z.object({
       type: z.string(),
       number: z.string(),
+      card_number: z.string().nullable(),
       proxy: z.object({
         ip: z.string(),
         port: z.number(),
@@ -130,6 +133,7 @@ export function registerBankAccountsController(http: IHttp) {
         .values({
           type: data.type,
           number: data.number,
+          card_number: data.card_number,
           auth: {
             proxy: data.proxy,
             cookies: await jar.serialize(),

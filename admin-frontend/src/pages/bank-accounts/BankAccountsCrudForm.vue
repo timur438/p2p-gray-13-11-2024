@@ -15,6 +15,12 @@
           label="Phone number"
           hint="В интернациональном формате без пробелов и скобок"/>
     </div>
+
+    <div class="col-12 col-lg-4">
+      <q-input
+          v-model="data.card_number"
+          label="Card number"/>
+    </div>
   </div>
 
   <div v-if="data.proxy" class="row q-col-gutter-lg q-mb-lg">
