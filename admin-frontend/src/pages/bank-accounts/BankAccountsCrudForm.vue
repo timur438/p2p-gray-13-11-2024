@@ -49,7 +49,7 @@
     </div>
     <div class="col-12 col-lg-6">
       <q-input
-          v-model="data.cookies['https://finance.ozon.ru/'][0]"
+          v-model="ozonCookies.finance.value"
           label="Finance domain Cookies"/>
       <div class="text-caption q-mt-xs">
         To get cookies, run: <code>document.cookie</code> in the browser console on this domain:
@@ -58,7 +58,7 @@
     </div>
     <div class="col-12 col-lg-6">
       <q-input
-          v-model="data.cookies['https://ozon.ru/'][0]"
+          v-model="ozonCookies.finance.value"
           label="Ozon Cookies"/>
       <div class="text-caption q-mt-xs">
         To get cookies, run: <code>document.cookie</code> in the browser console on this domain: https://ozon.ru/
@@ -70,18 +70,25 @@
 
 <script lang="ts" setup>
   import {useCrudCtx} from '@/components/crud/form.ts'
-  import {watch} from 'vue'
+  import {computed} from 'vue'
 
   const ctx = useCrudCtx()
   const data = ctx.data
 
-  watch(() => data.value.type, (type: string) => {
-    if (type === 'ozon') {
-      data.value.cookies = {
-        'https://finance.ozon.ru/': [''],
-        'https://ozon.ru/': [''],
-      }
-      return
-    }
-  }, {immediate: true})
+  function safeStringCookies(domain: string) {
+    return computed<string>({
+      set(val: string) {
+        data.value.cookies ??= {}
+        data.value.cookies[domain] = [val]
+      },
+      get() {
+        return data.value.cookies?.[domain]?.[0] ?? ''
+      },
+    })
+  }
+
+  const ozonCookies = {
+    finance: safeStringCookies('https://finance.ozon.ru/'),
+    ozon: safeStringCookies('https://ozon.ru/'),
+  }
 </script>
