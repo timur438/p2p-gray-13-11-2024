@@ -3,6 +3,7 @@ import {listCrudRoute, tableColumn, tableColumnDate, tableColumnId} from '@/comp
 import BankAccountsCrudForm from '@/pages/bank-accounts/BankAccountsCrudForm.vue'
 import {updateCrudRoute} from '@/components/crud/update.ts'
 import {createCrudRoute} from '@/components/crud/create.ts'
+import BankAccountSelect from '@/components/crud/commons/BankAccountSelect.vue'
 
 export const routes: Array<RouteRecordRaw> = [
   listCrudRoute({
@@ -43,4 +44,11 @@ export const routes: Array<RouteRecordRaw> = [
     }),
     form: BankAccountsCrudForm,
   }),
+
+  {
+    path: '/bank-accounts/select',
+    name: 'bank-accounts.select',
+    component: BankAccountSelect,
+    meta: {title: 'Select Bank Account'},
+  },
 ]

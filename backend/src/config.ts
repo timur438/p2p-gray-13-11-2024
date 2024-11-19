@@ -7,6 +7,10 @@ const validator = z.object({
    */
   APP_SECRET: z.string().length(64),
   /**
+   * App URL.
+   */
+  APP_URL: z.string().url(),
+  /**
    * Redis URL.
    */
   REDIS_URL: z.string().url(),

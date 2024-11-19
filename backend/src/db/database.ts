@@ -6,6 +6,7 @@ type TNullableDateField = ColumnType<Date | null, Date | string | null, Date | s
 type TAutoDateField = ColumnType<Date, Date | string | undefined, Date | string>
 type TAutoBigNumberField = ColumnType<string, string | number | undefined, string | number | undefined>
 type TBigNumberField = ColumnType<string, string | number, string | number>
+type TNullableBigNumberField = ColumnType<string, string | number | undefined, string | number | undefined>
 type TANullableDateField = ColumnType<Date | null, Date | string | null | undefined, Date | string | null | undefined>
 type TNullable<T> = ColumnType<T | null, string | null | undefined, string | null | undefined>
 type TJsonValue<T> = ColumnType<T, T | string, T | string>
@@ -50,13 +51,13 @@ export interface DB {
 
   invoices: {
     id: Generated<string>
-    secure_key: string
-    status: number
+    secure_key: Generated<string>
+    status: Generated<number>
     app_id: TBigNumberField
     amount: number
     user_approved_at: TNullableDateField
-    bank_account_id: TBigNumberField
-    expires_at: TDateField
+    bank_account_id: TNullableBigNumberField
+    expires_at: TAutoDateField
     created_at: TAutoDateField
   }
 }

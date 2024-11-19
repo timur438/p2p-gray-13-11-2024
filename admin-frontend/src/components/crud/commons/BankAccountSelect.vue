@@ -3,24 +3,20 @@
       v-model="value"
       :options="items"
       option-value="id"
-      option-label="name"
+      option-label="number"
       :loading="loading"
       input-debounce="300"
-      :label="props.label"
+      label="Select a Bank Account"
       emit-value
       map-options>
     <template #selected-item="{opt}">
-      <q-img :src="opt.image" width="1rem" height="1rem" class="q-mr-sm"/>
-      {{ opt.name }}
+      {{ opt.number }}
     </template>
 
     <template v-slot:option="scope">
       <q-item v-bind="scope.itemProps">
-        <q-item-section avatar>
-          <q-img :src="scope.opt.image"/>
-        </q-item-section>
         <q-item-section>
-          <q-item-label>{{ scope.opt.name }}</q-item-label>
+          <q-item-label>{{ scope.opt.number }}</q-item-label>
         </q-item-section>
       </q-item>
     </template>
@@ -31,32 +27,17 @@
   import {onMounted, ref} from 'vue'
   import {api} from '@/api.ts'
 
-  const props = defineProps({
-    label: {
-      type: String,
-      default: 'Select a Resource',
-    },
-  })
-
-  const value = defineModel({
-    type: String,
-    default: '0',
-  })
-
+  const value = ref(null)
   const items = ref([])
   const loading = ref(false)
 
   async function loadItems() {
-
     loading.value = true
-
-    const {data} = await api.get('resources', {params: {limit: 500}})
+    const {data} = await api.get('bank-accounts', {params: {limit: 500}})
     items.value = data.items.map((item: any) => ({
       id: item.id,
-      name: item.name,
-      image: `/api/resource/${item.hash}`,
+      number: item.number,
     }))
-
     loading.value = false
   }
 

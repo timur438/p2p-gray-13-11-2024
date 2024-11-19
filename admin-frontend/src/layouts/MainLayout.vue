@@ -50,6 +50,13 @@
           <q-item-section>Managers</q-item-section>
         </q-item>
 
+        <q-item :to="{name: 'invoices.list'}" exact>
+          <q-item-section avatar>
+            <q-icon name="receipt"/>
+          </q-item-section>
+          <q-item-section>Invoices</q-item-section>
+        </q-item>
+
       </q-list>
     </q-drawer>
 
