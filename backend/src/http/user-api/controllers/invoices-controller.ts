@@ -2,8 +2,63 @@ import {IHttp} from '@/http'
 import {z} from 'zod'
 import {db} from '@/db'
 import {HttpError} from '@/util/exceptions.ts'
+import {config} from '@/config.ts'
 
 export function invoicesController(http: IHttp) {
+
+
+  http.route({
+    method: 'POST',
+    url: '/user-api/invoice/new',
+    schema: {
+      body: z.object({
+        price: z.coerce.number().int().positive(),
+      }),
+    },
+    async handler(req) {
+      const price = req.body.price
+
+      const app = await db.selectFrom('apps')
+        .select('id')
+        .orderBy('id', 'asc')
+        .limit(1)
+        .executeTakeFirst()
+      if (!app) {
+        throw new HttpError(400, 'No apps')
+      }
+
+      const bankAccount = await db.selectFrom('bank_accounts as ba')
+        .where(qb => qb.not(qb.exists(
+          qb.selectFrom('invoices as i')
+            .whereRef('i.bank_account_id', '=', 'ba.id')
+            .where('i.status', '=', 0)
+            .where('i.expires_at', '>', db.fn<Date>('now')),
+        )))
+        .select('ba.id')
+        .orderBy('ba.id', 'asc')
+        .limit(1)
+        .executeTakeFirst()
+      if (!bankAccount) {
+        throw new HttpError(400, 'No bank accounts')
+      }
+
+      const invoice = await db.insertInto('invoices')
+        .values({
+          app_id: app.id,
+          bank_account_id: bankAccount.id,
+          amount: price,
+        })
+        .returning(['id', 'secure_key'])
+        .executeTakeFirst()
+      if (!invoice) {
+        throw new HttpError(500)
+      }
+
+      const url = config.APP_URL.replace(/\/$/, '') + `/payment/${invoice.secure_key}${invoice.id}`
+
+      return {url}
+    },
+  })
 
   http.route({
     method: 'GET',
@@ -32,7 +87,6 @@ export function invoicesController(http: IHttp) {
     },
   })
 
-
   http.route({
     method: 'POST',
     url: '/user-api/invoice/:invoice/approve',
@@ -58,4 +112,5 @@ export function invoicesController(http: IHttp) {
       }
     },
   })
+
 }
