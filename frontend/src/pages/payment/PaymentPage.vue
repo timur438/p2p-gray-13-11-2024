@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center h-[100vh]">
-    <app-spinner v-if="loading && invoice"/>
+    <app-spinner v-if="loading && !invoice"/>
 
     <div v-else
          class="flex flex-col gap-[13px] w-[430px] p-[26px_18px] rounded-[12px] shadow-[0_2px_17.5px_0_rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] bg-[#0e0e0e]">
@@ -9,31 +9,46 @@
         <div class="text-[32px] font-medium text-white">{{ invoice!.amount }}₽</div>
         <div class="text-[16px] text-[rgba(255,255,255,0.35)]">К оплате</div>
         <div class="flex-grow"></div>
-        <div class="">{{ countdown }}</div>
+        <div v-if="invoice?.status === 1" class="text-[#21FF51]">Платёж принят</div>
+        <div v-else-if="invoice?.status === 2" class="text-[#FF2121]">Платёж отклонён</div>
+        <div v-else-if="isExpired" class="text-[#FF2121]">Платёж устарел</div>
+        <div v-else-if="invoice?.status === 0 && !invoice.user_approved_at">{{ countdown }}</div>
       </div>
 
-      <template v-if="invoice!.number">
+      <template v-if="invoice!.number && !isExpired && invoice?.status === 0">
 
-        <div class="bg-alert px-4 py-7 rounded-lg text-[#313131] text-[20px] leading-7 font-medium text-center">
-          Переведите по указанным реквизитам
-          ТОЧНУЮ сумму в течение 15 мин.
-        </div>
+        <template v-if="invoice.user_approved_at">
+          <div class="bg-alert px-4 py-7 rounded-lg text-[#313131] text-[20px] leading-7 font-medium text-center">
+            Платеж в обработке! <br>
+            Не закрывайте страницу
+          </div>
+        </template>
 
-        <div class="p-2 rounded-md bg-[#181818]">
-          {{ invoice!.number }}
-        </div>
+        <template v-else>
 
-        <div class="h-[1px] w-100 bg-white opacity-20"/>
+          <div class="bg-alert px-4 py-7 rounded-lg text-[#313131] text-[20px] leading-7 font-medium text-center">
+            Переведите по указанным реквизитам
+            ТОЧНУЮ сумму в течение 15 мин.
+          </div>
 
-        <div class="flex gap-3">
-          <button class="py-2 px-3 flex-grow rounded-md bg-[#ff8f1e]">Я оплатил</button>
-          <button class="py-2 px-3 flex-grow rounded-md border border-[rgba(255,255,255,0.08)] bg-[#121212]">Отмена</button>
-        </div>
+          <div class="p-2 rounded-md bg-[#181818]">
+            {{ invoice!.number }}
+          </div>
 
-        <div>
-          <a href="https://t.me/" target="_blank">Обратиться</a>
-          в техническую поддержку
-        </div>
+          <div class="h-[1px] w-100 bg-white opacity-20"/>
+
+          <div class="flex gap-3">
+            <button class="btn-primary" @click="approveInvoice">Я оплатил</button>
+            <button class="btn-secondary">Отмена
+            </button>
+          </div>
+
+          <div>
+            <a href="https://t.me/" target="_blank">Обратиться</a>
+            в техническую поддержку
+          </div>
+
+        </template>
 
       </template>
 
@@ -44,10 +59,10 @@
 <script lang="ts" setup>
   import {useRoute} from 'vue-router'
   import AppSpinner from '@/components/common/AppSpinner.vue'
-  import {computed, ref, watch} from 'vue'
+  import {computed, ref} from 'vue'
   import {api} from '@/api.ts'
   import {IInvoiceData} from '@/types/IInvoiceData.ts'
-  import {useTimestamp} from '@vueuse/core'
+  import {useIntervalFn, useTimestamp} from '@vueuse/core'
 
   const route = useRoute()
 
@@ -64,10 +79,17 @@
     loading.value = false
   }
 
-  watch(paymentId, loadInvoice, {immediate: true})
+  async function approveInvoice() {
+    await api.post(`/invoice/${paymentId.value}/approve`)
+    await loadInvoice()
+  }
+
+  useIntervalFn(loadInvoice, 1000, {immediateCallback: true})
 
   const timestamp = useTimestamp({immediate: true, interval: 1000})
-  const countdown = computed(() => {
+  const isExpired = computed(() => delta.value <= 0)
+
+  const delta = computed(() => {
     const inv = invoice.value
     if (!inv) {
       return 0
@@ -79,7 +101,11 @@
     }
 
     const diff = expr - timestamp.value
-    const ms = Math.max(0, diff)
+    return Math.max(0, diff)
+  })
+
+  const countdown = computed(() => {
+    const ms = delta.value
 
     // mm:ss
     return Math.floor(ms / 1000 / 60) + ':' + Math.floor(ms / 1000 % 60).toString().padStart(2, '0')

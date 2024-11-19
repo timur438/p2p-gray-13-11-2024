@@ -18,6 +18,14 @@ body {
   background-repeat: no-repeat;
 }
 
-a[href]{
+a[href] {
   @apply text-[#ff8f1e] underline underline-offset-2 cursor-pointer;
+}
+
+.btn-primary {
+  @apply py-2 px-3 flex-grow rounded-md bg-[#ff8f1e];
+}
+
+.btn-secondary {
+  @apply py-2 px-3 flex-grow rounded-md border border-[rgba(255,255,255,0.08)] bg-[#121212];
 }

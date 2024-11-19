@@ -54,6 +54,7 @@ export interface DB {
     status: number
     app_id: TBigNumberField
     amount: number
+    user_approved_at: TNullableDateField
     bank_account_id: TBigNumberField
     expires_at: TDateField
     created_at: TAutoDateField
