@@ -12,11 +12,15 @@ export function formatMoney(
 ) {
   const ticker = opts?.ticker ?? '₽'
   const precision = opts?.precision ?? 0
-  const splitter = opts?.splitter ?? '\u2009'
+  const splitter = opts?.splitter ?? ' '
 
   const parts = value.toFixed(precision).split('.')
   const integer = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, splitter)
   const fractional = (parts[1] || '').replace(/0+$/, '')
 
-  return `${integer}${fractional ? '.' : ''}${fractional} ${ticker}`.trim()
+  if (!fractional) {
+    return `${integer} ${ticker}`.trim()
+  }
+
+  return `${integer}.${fractional} ${ticker}`.trim()
 }

@@ -1,10 +1,14 @@
 import pluginForms from '@tailwindcss/forms'
 
-export default {
+/**
+ * @type {import('tailwindcss').Config}
+ */
+const config = {
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
   ],
+  darkMode: false,
   theme: {
     fontFamily: {
       sans: [
@@ -28,3 +32,5 @@ export default {
     pluginForms,
   ],
 }
+
+export default config
