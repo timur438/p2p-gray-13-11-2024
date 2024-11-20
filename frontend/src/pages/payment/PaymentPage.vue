@@ -6,7 +6,7 @@
         class="flex flex-col gap-[13px] w-[430px] p-[26px_18px] rounded-[12px] shadow-[0_2px_17.5px_0_rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] bg-[#0e0e0e]">
 
       <div v-if="invoice" class="flex items-center gap-3">
-        <div class="text-[32px] font-medium text-white">{{ invoice?.amount }}₽</div>
+        <div class="text-[32px] font-medium text-white">{{ formatMoney(invoice?.amount) }}</div>
         <div class="text-[16px] text-[rgba(255,255,255,0.35)]">К оплате</div>
         <div class="flex-grow"></div>
         <div v-if="invoice!.status === 1" class="text-[#21FF51]">Платёж принят</div>
@@ -47,7 +47,7 @@
           </div>
 
           <div v-if="paymentType === 'card'" class="p-2 rounded-md bg-[#181818]">
-            {{ invoice!.card_number }}
+            {{ formatCardNumber(invoice!.card_number) }}
           </div>
 
           <div v-else-if="paymentType === 'sbp'" class="p-2 rounded-md bg-[#181818]">
@@ -82,6 +82,7 @@
   import {IInvoiceData} from '@/types/IInvoiceData.ts'
   import {useIntervalFn, useTimestamp} from '@vueuse/core'
   import AppSpinner from '@/components/common/AppSpinner.vue'
+  import {formatCardNumber, formatMoney} from '../../util/format.ts'
 
   const route = useRoute()
 
