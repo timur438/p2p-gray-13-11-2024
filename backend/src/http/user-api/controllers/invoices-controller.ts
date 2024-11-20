@@ -6,7 +6,6 @@ import {config} from '@/config.ts'
 
 export function invoicesController(http: IHttp) {
 
-
   http.route({
     method: 'POST',
     url: '/user-api/invoice/new',
@@ -27,6 +26,7 @@ export function invoicesController(http: IHttp) {
         throw new HttpError(400, 'No apps')
       }
 
+      /* // proper variant
       const bankAccount = await db.selectFrom('bank_accounts as ba')
         .where(qb => qb.not(qb.exists(
           qb.selectFrom('invoices as i')
@@ -36,6 +36,12 @@ export function invoicesController(http: IHttp) {
         )))
         .select('ba.id')
         .orderBy('ba.id', 'asc')
+        .limit(1)
+        .executeTakeFirst()*/
+      // random bank account variant
+      const bankAccount = await db.selectFrom('bank_accounts as ba')
+        .select('id')
+        .orderBy(qb => qb.fn('random'))
         .limit(1)
         .executeTakeFirst()
       if (!bankAccount) {
