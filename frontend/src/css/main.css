@@ -4,29 +4,59 @@
 @import "tailwindcss/utilities.css";
 @import "../assets/icons/icons.css";
 
-body {
-  background-color: #000;
-  background-image: url(../assets/img/background.jpeg);
-  background-size: cover;
-  background-position: bottom center;
-  background-attachment: fixed;
+@layer base {
+  body {
+    background-color: #000;
+    /* noinspection CssUnknownTarget */
+    background-image: url(@/assets/img/background.jpeg);
+    background-size: cover;
+    background-position: bottom center;
+    background-attachment: fixed;
+
+    &::before {
+      content: '';
+      @apply absolute pointer-events-none z-[-1];
+      @apply top-4 left-4 right-4 bottom-4 bg-top bg-no-repeat bg-contain;
+      @apply md:bg-left-top md:bg-auto;
+
+      /* noinspection CssUnknownTarget */
+      background-image: url(@/assets/img/bg-logo.svg);
+      background-repeat: no-repeat;
+    }
+  }
+
+  a[href] {
+    @apply text-[#ff8f1e] underline underline-offset-2 cursor-pointer;
+  }
 }
 
-.bg-alert {
-  background-image: url(../assets/img/alert-bg.jpeg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+@layer components {
+  .bg-alert {
+    /* noinspection CssUnknownTarget */
+    background-image: url(@/assets/img/alert-bg.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 
-a[href] {
-  @apply text-[#ff8f1e] underline underline-offset-2 cursor-pointer;
-}
+  .btn-primary {
+    @apply py-2 px-3;
+    @apply flex-grow;
+    @apply rounded-md text-center bg-[#ff8f1e];
+  }
 
-.btn-primary {
-  @apply py-2 px-3 flex-grow rounded-md text-center bg-[#ff8f1e];
-}
+  .btn-secondary {
+    @apply py-2 px-3;
+    @apply flex-grow;
+    @apply rounded-md text-center border-white border-opacity-[0.08] bg-[#121212];
+  }
 
-.btn-secondary {
-  @apply py-2 px-3 flex-grow rounded-md text-center border border-[rgba(255,255,255,0.08)] bg-[#121212];
+  .form-input {
+    @apply py-2 px-3;
+    @apply rounded-md border border-white border-opacity-[0.08] bg-[#121212] text-white outline-none;
+
+    &:focus {
+      @apply border-[#ff8f1e] ring-0;
+    }
+  }
 }
