@@ -9,6 +9,33 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '/payment/:id',
     name: 'payment',
-    component: () => import('./PaymentPage.vue'),
+    component: () => import('./PaymentPageWrapper.vue'),
+    children: [
+      {
+        path: '',
+        name: 'payment.begin',
+        component: () => import('./PaymentBeginPage.vue'),
+      },
+      {
+        path: 'card',
+        name: 'payment.card',
+        component: () => import('./PaymentCardPage.vue'),
+      },
+      {
+        path: 'phone',
+        name: 'payment.phone',
+        component: () => import('./PaymentPhonePage.vue'),
+      },
+      {
+        path: 'wait',
+        name: 'payment.wait',
+        component: () => import('./PaymentWaitPage.vue'),
+      },
+      {
+        path: 'result',
+        name: 'payment.result',
+        component: () => import('./PaymentResultPage.vue'),
+      },
+    ],
   },
 ]
