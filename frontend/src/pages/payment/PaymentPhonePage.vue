@@ -5,8 +5,11 @@
       ТОЧНУЮ сумму в течение 15 мин.
     </div>
 
-    <div class="p-2 rounded-md bg-[#181818]">
-      {{ invoice.number }}
+    <div>
+      <div>Озон банк</div>
+      <div class="p-2 rounded-md bg-[#181818]">
+        {{ invoice.number }}
+      </div>
     </div>
 
     <div class="h-[1px] w-100 bg-white opacity-20"/>
