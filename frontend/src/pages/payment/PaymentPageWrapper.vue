@@ -71,14 +71,22 @@
   async function handleApprove(stage: 'card' | 'phone') {
     await api.post(`/invoice/${route.params.id}/approve`, {stage})
     await loadInvoice()
-    router.push({name: 'payment.wait', params: {id: route.params.id}})
+    await router.push({name: 'payment.wait', params: {id: route.params.id}})
   }
 
   function handleCancel() {
     router.push({name: 'payment.begin', params: {id: route.params.id}})
   }
 
-  watch([() => invoice.value?.status, isExpired], ([status, expired]) => {
+  watch([
+    () => invoice.value !== null,
+    () => invoice.value?.status,
+    isExpired,
+  ], ([loaded, status, expired]) => {
+    if (!loaded) {
+      return
+    }
+
     if (status === 1 || status === 2 || expired) {
       router.push({name: 'payment.result', params: {id: route.params.id}})
     }
