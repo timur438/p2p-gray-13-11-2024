@@ -1,15 +1,5 @@
 import { config as loadEnv } from 'dotenv';
 import { z } from 'zod';
-import { existsSync, readFileSync } from 'fs';
-
-const envFilePath = '.env';
-if (!existsSync(envFilePath)) {
-  console.error('Error: .env file not found. Please create it and provide the necessary environment variables.');
-  process.exit(1);
-}
-
-const envContent = readFileSync(envFilePath, 'utf-8');
-console.log('Contents of .env file:\n', envContent);
 
 loadEnv();
 
