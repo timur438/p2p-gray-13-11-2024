@@ -1,4 +1,15 @@
-import {z} from 'zod'
+import { config as loadEnv } from 'dotenv';
+import { z } from 'zod';
+import { existsSync } from 'fs';
+
+// Проверка на существование файла .env
+if (!existsSync('.env')) {
+  console.error('Error: .env file not found. Please create it and provide the necessary environment variables.');
+  process.exit(1);
+}
+
+// Загрузка переменных из .env
+loadEnv();
 
 const validator = z.object({
   /**
@@ -18,13 +29,14 @@ const validator = z.object({
    * Postgres database URL or connection string.
    */
   DATABASE_URL: z.string().url(),
-})
+});
 
-export const parse = validator.safeParse(process.env)
+// Валидация переменных окружения
+export const parse = validator.safeParse(process.env);
 
 if (!parse.success) {
-  console.error('Invalid env:', parse.error.message)
-  process.exit(1)
+  console.error('Invalid env:', JSON.stringify(parse.error.errors, null, 2));
+  process.exit(1);
 }
 
-export const config = parse.data
+export const config = parse.data;
