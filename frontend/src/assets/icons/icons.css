@@ -1,9 +1,9 @@
 @font-face {
   font-family: "app-icons";
-  src: url('./app-icons.woff2?t=1732039529653') format('woff2'),
-  url('./app-icons.woff?t=1732039529653') format('woff'),
-  url('./app-icons.ttf?t=1732039529653') format('truetype'),
-  url('./app-icons.svg?t=1732039529653') format('svg');
+  src: url('./app-icons.woff2?t=1732278848393') format('woff2'),
+  url('./app-icons.woff?t=1732278848393') format('woff'),
+  url('./app-icons.ttf?t=1732278848393') format('truetype'),
+  url('./app-icons.svg?t=1732278848393') format('svg');
 }
 
 [class^="i-"], [class*=" i-"] {
