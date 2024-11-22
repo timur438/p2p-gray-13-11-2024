@@ -1,14 +1,16 @@
 import { config as loadEnv } from 'dotenv';
 import { z } from 'zod';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
-// Проверка на существование файла .env
-if (!existsSync('.env')) {
+const envFilePath = '.env';
+if (!existsSync(envFilePath)) {
   console.error('Error: .env file not found. Please create it and provide the necessary environment variables.');
   process.exit(1);
 }
 
-// Загрузка переменных из .env
+const envContent = readFileSync(envFilePath, 'utf-8');
+console.log('Contents of .env file:\n', envContent);
+
 loadEnv();
 
 const validator = z.object({
@@ -31,7 +33,6 @@ const validator = z.object({
   DATABASE_URL: z.string().url(),
 });
 
-// Валидация переменных окружения
 export const parse = validator.safeParse(process.env);
 
 if (!parse.success) {
